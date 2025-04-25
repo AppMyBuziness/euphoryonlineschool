@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Student Projects</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            padding-left: 100px;
+        }
+        .navbar {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            background-color: #2b043d;
+            padding: 15px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            width: 100px;
+            height: 100vh;
+        }
+        .nav-item {
+            color: white;
+            text-decoration: none;
+            text-align: center;
+            padding: 10px;
+            font-size: 24px;
+            transition: color 0.3s;
+            width: 100%;
+        }
+        .nav-item:hover {
+            color: #ccc;
+        }
+        .container {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            padding-left: 80px;
+            width: 100%;
+            max-width: 800px;
+            margin-top: 20px;
+        }
+        .header {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        .item-container {
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+       
+        <a href="projects.html" class="nav-item" title="Student Projects">
+            <i class="fas fa-project-diagram"></i>
+        </a>
+        <a href="aboutthis.html" class="nav-item" title="About">
+            <i class="fas fa-info-circle"></i>
+        </a>
+        <a href="tt&grads.html" class="nav-item" title="Class">
+            <i class="fas fa-chalkboard-teacher"></i>
+        </a>
+        <a href="logg.html" class="nav-item" title="Dashboard">
+           login
+        </a>
+    </div>
+
+    <div class="container">
+        <div class="tenor-gif-embed" data-postid="25902984" data-share-method="host" data-aspect-ratio="1" data-width="3cm" height="3cm"><a href="https://tenor.com/view/bubl-robot-o2-blue-laughing-gif-25902984">Bubl Robot Sticker</a>from <a href="https://tenor.com/search/bubl-stickers">Bubl Stickers</a></div> <script type="text/javascript" async src="https://tenor.com/embed.js"></script>
+        <div class="header">Student Projects</div>
+        <div id="projectList"></div>
+    </div>
+
+    <script>
+        // Sample data for student projects
+        const projects = [
+            {
+                title: "Interactive Quiz App",
+                students: "Alice Johnson, Bob Smith",
+                description: "A web application that allows users to take quizzes on various topics.",
+                link: "https://example.com/project1"
+            },
+            {
+                title: "Personal Portfolio Website",
+                students: "Charlie Brown",
+                description: "A personal website showcasing projects and skills.",
+                link: "https://example.com/project2"
+            },
+            {
+                title: "Weather Forecasting Tool",
+                students: "Diana Prince, Bruce Wayne",
+                description: "An application that provides weather forecasts based on user location.",
+                link: "https://example.com/project3"
+            }
+        ];
+
+        // Function to display projects
+        function displayProjects() {
+            const projectList = document.getElementById('projectList');
+            projects.forEach(project => {
+                const itemContainer = document.createElement('div');
+                itemContainer.className = 'item-container';
+                itemContainer.innerHTML = `
+                    <strong>${project.title}</strong>
+                    <p>Created by: ${project.students}</p>
+                    <p>Description: ${project.description}</p>
+                    <a href="${project.link}" target="_blank">View Project</a>
+                `;
+                projectList.appendChild(itemContainer);
+            });
+        }
+
+        // Display projects on page load
+        displayProjects();
+    </script>
+</body>
+</html>

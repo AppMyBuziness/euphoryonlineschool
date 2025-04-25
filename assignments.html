@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Assignments</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            padding-left: 100px;
+        }
+        .navbar {
+           display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            background-color: #2b043d;
+            padding: 20px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            width: 100px;
+            height: 100vh;
+        }
+        .nav-item {
+            color: white;
+            text-decoration: none;
+            text-align: center;
+            padding: 10px;
+            font-size: 24px;
+            transition: color 0.3s;
+            width: 100%;
+        }
+        .nav-item:hover {
+            color: #ccc;
+        }
+        .container {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            padding-left: 80px;
+            width: 100%;
+            max-width: 800px;
+            margin-top: 20px;
+        }
+        .header {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        .item-container {
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <a href="videos.html" class="nav-item" title="Videos and Notes">
+            <i class="fas fa-video"></i>
+        </a>
+        <a href="books.html" class="nav-item" title="Books">
+            <i class="fas fa-book"></i>
+        </a>
+        <a href="assignments.html" class="nav-item" title="Assignments">
+            <i class="fas fa-tasks"></i>
+        </a>
+        <a href="projects.html" class="nav-item" title="Student Projects">
+            <i class="fas fa-project-diagram"></i>
+        </a>
+        <a href="aboutthis.html" class="nav-item" title="About">
+            <i class="fas fa-info-circle"></i>
+        </a>
+        <a href="tt&grads.html" class="nav-item" title="Class">
+            <i class="fas fa-chalkboard-teacher"></i>
+        </a>
+       
+        <a href="file:///C:/Users/DELL/Documents/coding.html" class="nav-item" title="Dashboard">
+            <i class="fas fa-tachometer-alt"></i>
+        </a>
+    </div>
+
+    <div class="container">
+        <div class="tenor-gif-embed" data-postid="21188383" data-share-method="host" data-aspect-ratio="1" data-width="3cm" height="3cm"><a href="https://tenor.com/view/angry-emo-gif-21188383">Angry Emo Sticker</a>from <a href="https://tenor.com/search/angry-stickers">Angry Stickers</a></div> <script type="text/javascript" async src="https://tenor.com/embed.js"></script>
+        <div class="header">Assignments and Tests</div>
+        <div id="assignmentList"></div>
+    </div>
+
+    <script>
+        // Sample data for assignments
+        const assignments = [
+            {
+                name: "JavaScript Basics Assignment",
+                dueDate: "2025-05-01",
+                pdfLink: "https://example.com/assignment1.pdf",
+                totalMark: "100"
+            },
+            {
+                name: "CSS Project",
+                dueDate: "2025-05-10",
+                pdfLink: "https://example.com/assignment2.pdf",
+                totalMark: "50"
+            }
+        ];
+
+        // Function to display assignments
+        function displayAssignments() {
+            const assignmentList = document.getElementById('assignmentList');
+            assignments.forEach(assignment => {
+                const itemContainer = document.createElement('div');
+                itemContainer.className = 'item-container';
+                itemContainer.innerHTML = `
+                    <strong>${assignment.name}</strong>
+                    <p>Due Date: ${assignment.dueDate}</p>
+                    <a href="${assignment.pdfLink}" target="_blank">Download PDF</a>
+                    <p>Total Mark: ${assignment.totalMark}</p>
+                `;
+                assignmentList.appendChild(itemContainer);
+            });
+        }
+
+        // Display assignments on page load
+        displayAssignments();
+    </script>
+</body>
+</html>

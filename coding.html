@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            padding-left: 100px;
+        }
+
+        .navbar {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            background-color: #2b043d;
+            padding: 15px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            width: 100px;
+            height: 100vh;
+        }
+
+        .nav-item {
+            color: white;
+            text-decoration: none;
+            text-align: center;
+            padding: 10px;
+            font-size: 24px;
+            transition: color 0.3s;
+            width: 100%;
+        }
+
+        .nav-item:hover {
+            color: #ccc;
+        }
+
+        .dashboard-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 20px;
+            margin-top: 100px;
+        }
+
+        .profile {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            width: 100%;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .chat-container {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            width: 100%;
+            max-width: 600px;
+            margin-top: 20px;
+        }
+
+        .message-display {
+            height: 300px;
+            overflow-y: auto;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+        .message-input {
+            display: flex;
+        }
+
+        .message-input input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-right: 5px;
+        }
+
+        .message-input button {
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .message-input button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="navbar">
+        <a href="videos.html" class="nav-item" title="Videos and Notes">
+            <i class="fas fa-video"></i>
+        </a>
+        <a href="books.html" class="nav-item" title="Books">
+            <i class="fas fa-book"></i>
+        </a>
+        <a href="assignments.html" class="nav-item" title="Assignments">
+            <i class="fas fa-tasks"></i>
+        </a>
+        <a href="projects.html" class="nav-item" title="Student Projects">
+            <i class="fas fa-project-diagram"></i>
+        </a>
+        <a href="aboutthis.html" class="nav-item" title="About">
+            <i class="fas fa-info-circle"></i>
+        </a>
+        <a href="tt&grads.html" class="nav-item" title="Class">
+            <i class="fas fa-chalkboard-teacher"></i>
+        </a>
+        <a href="dashboard.html" class="nav-item" title="Dashboard">
+            <i class="fas fa-tachometer-alt"></i>
+        </a>
+    </div>
+
+    <div class="dashboard-container">
+        <div class="profile">
+            <h2 id="displayUsername">DefaultUser</h2>
+            <p id="displayEmail">Email: user@example.com</p>
+            <div class="totals">
+                <h2>Dashboard Totals</h2>
+                <p>Total marks: <span id="totalmarks">0</span></p>
+            </div>
+        </div>
+
+        <div class="chat-container">
+            <div class="chat-header">Class Chat</div>
+            <div class="message-display" id="messageDisplay"></div>
+            <div class="message-input">
+                <input type="text" id="messageInput" placeholder="Type your message...">
+                <button onclick="sendMessage()">Send</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Array to store messages
+        let messages = [];
+
+        // Load user data and messages on page load
+        window.onload = function () {
+            loadUserData();
+            loadMessages();
+        };
+
+        function loadUserData() {
+            const username = sessionStorage.getItem('username') || 'DefaultUser';
+            const email = sessionStorage.getItem('email') || 'user@example.com';
+            const totalMarks = sessionStorage.getItem('totalMarks') || 0;
+
+            document.getElementById('displayUsername').textContent = username;
+            document.getElementById('displayEmail').textContent = 'Email: ' + email;
+            document.getElementById('totalmarks').textContent = totalMarks;
+        }
+
+        function loadMessages() {
+            const currentTime = new Date().getTime();
+            messages = messages.filter(msg => (currentTime - msg.timestamp) < (3 * 24 * 60 * 60 * 1000));
+
+            messages.forEach(msg => displayMessage(msg.username, msg.text, msg.timestamp));
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('messageInput');
+            const message = input.value;
+            const username = sessionStorage.getItem('username') || 'User';
+
+            if (message) {
+                const newMessage = { username: username, text: message, timestamp: new Date().getTime() };
+                messages.push(newMessage); // Store message in the array
+                displayMessage(username, message, newMessage.timestamp);
+                input.value = '';
+                document.getElementById('messageDisplay').scrollTop = document.getElementById('messageDisplay').scrollHeight;
+            }
+        }
+
+        function displayMessage(username, message, timestamp) {
+            const display = document.getElementById('messageDisplay');
+            const messageElement = document.createElement('div');
+
+            const usernameElement = document.createElement('span');
+            usernameElement.textContent = username + ': ';
+
+            const textElement = document.createElement('span');
+            textElement.textContent = message;
+
+            const date = new Date(timestamp);
+            const formattedDate = date.toLocaleString();
+            const timestampElement = document.createElement('span');
+            timestampElement.textContent = ' (' + formattedDate + ')';
+            timestampElement.style.fontSize = 'small';
+            timestampElement.style.color = 'gray';
+
+            messageElement.appendChild(usernameElement);
+            messageElement.appendChild(textElement);
+            messageElement.appendChild(timestampElement);
+            display.appendChild(messageElement);
+        }
+    </script>
+</body>
+</html>
