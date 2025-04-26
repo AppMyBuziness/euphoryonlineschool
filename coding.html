@@ -156,9 +156,6 @@
     </div>
 
     <script>
-        // Array to store messages
-        let messages = [];
-
         // Load user data and messages on page load
         window.onload = function () {
             loadUserData();
@@ -176,10 +173,13 @@
         }
 
         function loadMessages() {
-            const currentTime = new Date().getTime();
-            messages = messages.filter(msg => (currentTime - msg.timestamp) < (3 * 24 * 60 * 60 * 1000));
-
-            messages.forEach(msg => displayMessage(msg.username, msg.text, msg.timestamp));
+            fetch('/messages')
+                .then(response => response.json())
+                .then(messages => {
+                    const currentTime = new Date().getTime();
+                    const validMessages = messages.filter(msg => (currentTime - msg.timestamp) < (3 * 24 * 60 * 60 * 1000));
+                    validMessages.forEach(msg => displayMessage(msg.username, msg.text, msg.timestamp));
+                });
         }
 
         function sendMessage() {
@@ -189,10 +189,18 @@
 
             if (message) {
                 const newMessage = { username: username, text: message, timestamp: new Date().getTime() };
-                messages.push(newMessage); // Store message in the array
-                displayMessage(username, message, newMessage.timestamp);
-                input.value = '';
-                document.getElementById('messageDisplay').scrollTop = document.getElementById('messageDisplay').scrollHeight;
+                
+                fetch('/messages', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(newMessage)
+                }).then(() => {
+                    displayMessage(username, message, newMessage.timestamp);
+                    input.value = '';
+                    document.getElementById('messageDisplay').scrollTop = document.getElementById('messageDisplay').scrollHeight;
+                });
             }
         }
 
