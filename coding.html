@@ -205,24 +205,28 @@
             });
         }
 
-        function sendMessage() {
-            const input = document.getElementById('messageInput');
-            const message = input.value;
-            const username = sessionStorage.getItem('username') || 'User';
+       function sendMessage() {
+    const input = document.getElementById('messageInput');
+    const message = input.value.trim();
+    const username = sessionStorage.getItem('username') || 'User';
 
-            if (message) {
-                addDoc(collection(db, "messages"), {
-                    username: username,
-                    text: message,
-                    timestamp: new Date()
-                }).then(() => {
-                    input.value = ''; // Clear the input
-                }).catch(error => {
-                    console.error("Error adding document: ", error);
-                });
-            }
-        }
-
+    if (message) {
+        addDoc(collection(db, "messages"), {
+            username: username,
+            text: message,
+            timestamp: new Date()
+        })
+        .then(() => {
+            input.value = ''; // Clear the input
+        })
+        .catch(error => {
+            console.error("Error adding document: ", error);
+            alert("Failed to send message. Please try again.");
+        });
+    } else {
+        alert("Message cannot be empty!");
+    }
+}
         function displayMessage(username, message, timestamp) {
             const display = document.getElementById('messageDisplay');
             const messageElement = document.createElement('div');
