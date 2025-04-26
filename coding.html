@@ -155,25 +155,10 @@
         </div>
     </div>
 
-    <script type="module">
-        // Import the functions you need from the SDKs you need
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, onSnapshot, orderBy, query } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-
-        // Your web app's Firebase configuration
-        const firebaseConfig = {
-            apiKey: "AIzaSyDibu9avT5_1Lxib1SCvyHlfhNN3Fsp5zg",
-            authDomain: "euphoryschool.firebaseapp.com",
-            projectId: "euphoryschool",
-            storageBucket: "euphoryschool.firebasestorage.app",
-            messagingSenderId: "538882631472",
-            appId: "1:538882631472:web:48beb2791275f1d7368af5",
-            measurementId: "G-L6TY9VRGF4"
-        };
-
-        // Initialize Firebase
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
+    <script>
+        const SHEET_ID = '1DdD3tS80ixAoCkg_acJnMPSctPDdJDx1NvLtjiGhSFI'; // Replace with your sheet ID
+        const API_KEY = 'AIzaSyBpHVmZjd1N_Fe-kfz-Gt8wCJKgWf-Jv3I'; // Replace with your API key
+        const RANGE = 'Sheet1!A:C'; // Adjust based on your sheet name and columns
 
         // Load user data and messages on page load
         window.onload = function () {
@@ -192,41 +177,45 @@
         }
 
         function loadMessages() {
-            const messagesRef = collection(db, "messages");
-            const q = query(messagesRef, orderBy("timestamp"));
-
-            onSnapshot(q, (snapshot) => {
-                const messageDisplay = document.getElementById('messageDisplay');
-                messageDisplay.innerHTML = '';
-                snapshot.forEach(doc => {
-                    const msg = doc.data();
-                    displayMessage(msg.username, msg.text, msg.timestamp);
+            fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${RANGE}?key=${API_KEY}`)
+                .then(response => response.json())
+                .then(data => {
+                    const messageDisplay = document.getElementById('messageDisplay');
+                    messageDisplay.innerHTML = '';
+                    const messages = data.values || [];
+                    messages.forEach(msg => {
+                        displayMessage(msg[0], msg[1], msg[2]);
+                    });
                 });
-            });
         }
 
-       function sendMessage() {
-    const input = document.getElementById('messageInput');
-    const message = input.value.trim();
-    const username = sessionStorage.getItem('username') || 'User';
+        function sendMessage() {
+            const input = document.getElementById('messageInput');
+            const message = input.value.trim();
+            const username = sessionStorage.getItem('username') || 'User';
 
-    if (message) {
-        addDoc(collection(db, "messages"), {
-            username: username,
-            text: message,
-            timestamp: new Date()
-        })
-        .then(() => {
-            input.value = ''; // Clear the input
-        })
-        .catch(error => {
-            console.error("Error adding document: ", error);
-            alert("Failed to send message. Please try again.");
-        });
-    } else {
-        alert("Message cannot be empty!");
-    }
-}
+            if (message) {
+                const timestamp = new Date().toISOString();
+                const values = [[username, message, timestamp]];
+                
+                fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${RANGE}:append?valueInputOption=RAW&key=${API_KEY}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ values }),
+                }).then(() => {
+                    input.value = ''; // Clear the input
+                    loadMessages(); // Reload messages
+                }).catch(error => {
+                    console.error("Error adding message: ", error);
+                    alert("Failed to send message. Please try again.");
+                });
+            } else {
+                alert("Message cannot be empty!");
+            }
+        }
+
         function displayMessage(username, message, timestamp) {
             const display = document.getElementById('messageDisplay');
             const messageElement = document.createElement('div');
@@ -252,7 +241,6 @@
     </script>
 </body>
 </html>
-        
 
         
 
