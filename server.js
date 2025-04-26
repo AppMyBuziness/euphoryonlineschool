@@ -4,7 +4,7 @@ const fs = require('fs');
 const path = require('path');
 
 const app = express();
-const PORT = 3000;
+const PORT = 4000;
 const messagesFilePath = path.join(__dirname, 'messages.json');
 
 app.use(bodyParser.json());
