@@ -6,13 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Dashboard</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-
+    
     <style>
         body {
             margin: 0;
             font-family: Arial, sans-serif;
             background-color: #f8f9fa;
-            padding-left: 100px;
+            padding-left: 100px; /* Add padding to the left for the navbar */
         }
 
         .navbar {
@@ -22,9 +22,9 @@
             align-items: center;
             background-color: #2b043d;
             padding: 15px;
-            position: fixed;
+            position: fixed; /* Fixed position */
             top: 0;
-            left: 0;
+            left: 0; /* Align to the left */
             z-index: 1000;
             width: 100px;
             height: 100vh;
@@ -50,8 +50,8 @@
             align-items: center;
             padding: 20px;
             max-width: 1200px;
-            margin: 20px;
-            margin-top: 100px;
+            margin: 20px; /* Adjust margin for spacing */
+            margin-top: 100px; /* Add margin-top to avoid overlap with the navbar */
         }
 
         .profile {
@@ -64,19 +64,54 @@
             margin-bottom: 20px;
         }
 
+        .profile img {
+            border-radius: 50%;
+            width: 80px;
+            height: 80px;
+        }
+
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+            gap: 10px;
+        }
+
+        .action-button {
+            background-color: #4a0a50;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+            width: 100%;
+            max-width: 150px;
+        }
+
+        .action-button:hover {
+            background-color: #965888;
+        }
+
         .chat-container {
             background-color: white;
             border-radius: 8px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             padding: 20px;
             width: 100%;
-            max-width: 600px;
+            max-width: 600px; /* Set a max width for the chat container */
             margin-top: 20px;
         }
 
+        .chat-header {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
         .message-display {
-            height: 300px;
-            overflow-y: auto;
+            height: 300px; /* Set a fixed height for the message area */
+            overflow-y: auto; /* Allow scrolling */
             border: 1px solid #ccc;
             border-radius: 4px;
             padding: 10px;
@@ -130,24 +165,44 @@
         <a href="tt&grads.html" class="nav-item" title="Class">
             <i class="fas fa-chalkboard-teacher"></i>
         </a>
-        <a href="coding.html" class="nav-item" title="Dashboard">
+        <a href="file:///C:/Users/DELL/Documents/coding.html" class="nav-item" title="Dashboard">
             <i class="fas fa-tachometer-alt"></i>
         </a>
     </div>
 
     <div class="dashboard-container">
         <div class="profile">
-            <h2 id="displayUsername">DefaultUser</h2>
+            <h2 id="displayUsername">Username</h2>
             <p id="displayEmail">Email: user@example.com</p>
+            <p id="displayPronoun">Pronoun: He/Him</p>
             <div class="totals">
                 <h2>Dashboard Totals</h2>
-                <p>Total marks: <span id="totalmarks">0</span></p>
+                <p>Total project marks <span id="totalLikesStories">0</span></p>
+                <p>Total test mark <span id="totalLikesBooks">0</span></p>
+                <p>Total exam mark <span id="totalBorrows">0</span></p>
             </div>
+            <div class="tenor-gif-embed" data-postid="21544397" data-share-method="host" data-aspect-ratio="1" data-width="7cm" height="7cm">
+                <a href="https://tenor.com/view/o2-bubl-o2bubl-funny-cute-gif-21544397">O2 Bubl Sticker</a> from 
+                <a href="https://tenor.com/search/o2-stickers">O2 Stickers</a>
+            </div>
+            <script type="text/javascript" async src="https://tenor.com/embed.js"></script>
+        </div>
+
+        <div class="action-buttons">
+            <button class="action-button" onclick="showEditProfilePopup()">Edit Profile</button>
+            <button class="action-button" onclick="openPublishStoryPopup()">Chat</button>
         </div>
 
         <div class="chat-container">
-            <div class="chat-header">Class Chat</div>
-            <div class="message-display" id="messageDisplay"></div>
+            <div class="tenor-gif-embed" data-postid="25902984" data-share-method="host" data-aspect-ratio="1" data-width="2cm" height="2cm">
+                <a href="https://tenor.com/view/bubl-robot-o2-blue-laughing-gif-25902984">Bubl Robot Sticker</a> from 
+                <a href="https://tenor.com/search/bubl-stickers">Bubl Stickers</a>
+            </div>
+            <script type="text/javascript" async src="https://tenor.com/embed.js"></script>
+            <div class="chat-header">classchat</div>
+            <div class="message-display" id="messageDisplay">
+                <!-- Messages will be displayed here -->
+            </div>
             <div class="message-input">
                 <input type="text" id="messageInput" placeholder="Type your message...">
                 <button onclick="sendMessage()">Send</button>
@@ -156,87 +211,90 @@
     </div>
 
     <script>
-        const SHEET_ID = '1DdD3tS80ixAoCkg_acJnMPSctPDdJDx1NvLtjiGhSFI'; // Replace with your sheet ID
-        const API_KEY = 'AIzaSyBpHVmZjd1N_Fe-kfz-Gt8wCJKgWf-Jv3I'; // Replace with your API key
-        const RANGE = 'Sheet1!A:C'; // Adjust based on your sheet name and columns
-
-        // Load user data and messages on page load
-        window.onload = function () {
-            loadUserData();
-            loadMessages();
+        const maxMessages = 100; // Maximum number of messages
+        const messageExpiryDays = 3; // Message expiry in days
+    
+        // Load messages from localStorage on page load
+        window.onload = function() {
+            const messages = JSON.parse(localStorage.getItem('chatMessages')) || [];
+            const currentTime = new Date().getTime();
+            
+            // Filter out expired messages
+            const validMessages = messages.filter(msg => (currentTime - msg.timestamp) < (messageExpiryDays * 24 * 60 * 60 * 1000));
+            localStorage.setItem('chatMessages', JSON.stringify(validMessages)); // Update localStorage
+            
+            validMessages.forEach(msg => displayMessage(msg.username, msg.text, msg.timestamp));
+            
+            // Load user data
+            document.getElementById('displayUsername').textContent = localStorage.getItem('username') || 'Username';
+            document.getElementById('displayEmail').textContent = 'Email: ' + (localStorage.getItem('email') || 'user@example.com');
+            document.getElementById('displayPronoun').textContent = 'Pronoun: ' + (localStorage.getItem('pronoun') || 'He/Him');
         };
-
-        function loadUserData() {
-            const username = sessionStorage.getItem('username') || 'DefaultUser';
-            const email = sessionStorage.getItem('email') || 'user@example.com';
-            const totalMarks = sessionStorage.getItem('totalMarks') || 0;
-
-            document.getElementById('displayUsername').textContent = username;
-            document.getElementById('displayEmail').textContent = 'Email: ' + email;
-            document.getElementById('totalmarks').textContent = totalMarks;
-        }
-
-        function loadMessages() {
-            fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${RANGE}?key=${API_KEY}`)
-                .then(response => response.json())
-                .then(data => {
-                    const messageDisplay = document.getElementById('messageDisplay');
-                    messageDisplay.innerHTML = '';
-                    const messages = data.values || [];
-                    messages.forEach(msg => {
-                        displayMessage(msg[0], msg[1], msg[2]);
-                    });
-                });
-        }
-
+    
         function sendMessage() {
             const input = document.getElementById('messageInput');
-            const message = input.value.trim();
-            const username = sessionStorage.getItem('username') || 'User';
-
+            const message = input.value;
+            const username = localStorage.getItem('username') || 'User';
+    
             if (message) {
-                const timestamp = new Date().toISOString();
-                const values = [[username, message, timestamp]];
-                
-                fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${RANGE}:append?valueInputOption=RAW&key=${API_KEY}`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ values }),
-                }).then(() => {
-                    input.value = ''; // Clear the input
-                    loadMessages(); // Reload messages
-                }).catch(error => {
-                    console.error("Error adding message: ", error);
-                    alert("Failed to send message. Please try again.");
-                });
-            } else {
-                alert("Message cannot be empty!");
+                const newMessage = { username: username, text: message, timestamp: new Date().getTime() };
+                const messages = JSON.parse(localStorage.getItem('chatMessages')) || [];
+    
+                // Add new message and maintain limit
+                messages.push(newMessage);
+                if (messages.length > maxMessages) {
+                    messages.shift(); // Remove the oldest message
+                }
+    
+                localStorage.setItem('chatMessages', JSON.stringify(messages));
+                displayMessage(username, message, newMessage.timestamp);
+                input.value = ''; // Clear the input
+                document.getElementById('messageDisplay').scrollTop = document.getElementById('messageDisplay').scrollHeight; // Scroll to the bottom
             }
         }
-
+    
         function displayMessage(username, message, timestamp) {
             const display = document.getElementById('messageDisplay');
             const messageElement = document.createElement('div');
-
+            
+            // Create a span for the username
             const usernameElement = document.createElement('span');
             usernameElement.textContent = username + ': ';
-
+            
+            // Create a span for the message text
             const textElement = document.createElement('span');
             textElement.textContent = message;
-
+    
+            // Format the timestamp
             const date = new Date(timestamp);
-            const formattedDate = date.toLocaleString();
+            const options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true };
+            const formattedDate = date.toLocaleDateString(undefined, options);
+    
+            // Create a span for the timestamp
             const timestampElement = document.createElement('span');
             timestampElement.textContent = ' (' + formattedDate + ')';
             timestampElement.style.fontSize = 'small';
             timestampElement.style.color = 'gray';
-
+    
+            // Apply styles if the username is "Ms Magna"
+            if (username === "Ms Magna") {
+                usernameElement.style.fontWeight = 'bold';
+                usernameElement.style.color = 'purple';
+            }
+    
+            // Append the username, message text, and timestamp
             messageElement.appendChild(usernameElement);
-            messageElement.appendChild(textElement);
-            messageElement.appendChild(timestampElement);
+            messageElement.appendChild(textElement); // Append the message text
+            messageElement.appendChild(timestampElement); // Append the timestamp
             display.appendChild(messageElement);
+        }
+    
+        function showEditProfilePopup() {
+            alert('Edit profile functionality not implemented yet.');
+        }
+    
+        function openPublishStoryPopup() {
+            alert('Chat functionality not implemented yet.');
         }
     </script>
 </body>
