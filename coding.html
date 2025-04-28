@@ -177,15 +177,10 @@
             <p id="displayPronoun">Pronoun: He/Him</p>
             <div class="totals">
                 <h2>Dashboard Totals</h2>
-                <p>Total project marks <span id="totalLikesStories">0</span></p>
-                <p>Total test mark <span id="totalLikesBooks">0</span></p>
-                <p>Total exam mark <span id="totalBorrows">0</span></p>
+                <p>Total project marks: <span id="totalLikesStories">0</span></p>
+                <p>Total test mark: <span id="totalLikesBooks">0</span></p>
+                <p>Total exam mark: <span id="totalBorrows">0</span></p>
             </div>
-            <div class="tenor-gif-embed" data-postid="21544397" data-share-method="host" data-aspect-ratio="1" data-width="7cm" height="7cm">
-                <a href="https://tenor.com/view/o2-bubl-o2bubl-funny-cute-gif-21544397">O2 Bubl Sticker</a> from 
-                <a href="https://tenor.com/search/o2-stickers">O2 Stickers</a>
-            </div>
-            <script type="text/javascript" async src="https://tenor.com/embed.js"></script>
         </div>
 
         <div class="action-buttons">
@@ -194,12 +189,7 @@
         </div>
 
         <div class="chat-container">
-            <div class="tenor-gif-embed" data-postid="25902984" data-share-method="host" data-aspect-ratio="1" data-width="2cm" height="2cm">
-                <a href="https://tenor.com/view/bubl-robot-o2-blue-laughing-gif-25902984">Bubl Robot Sticker</a> from 
-                <a href="https://tenor.com/search/bubl-stickers">Bubl Stickers</a>
-            </div>
-            <script type="text/javascript" async src="https://tenor.com/embed.js"></script>
-            <div class="chat-header">classchat</div>
+            <div class="chat-header">Class Chat</div>
             <div class="message-display" id="messageDisplay">
                 <!-- Messages will be displayed here -->
             </div>
@@ -213,86 +203,51 @@
     <script>
         const maxMessages = 100; // Maximum number of messages
         const messageExpiryDays = 3; // Message expiry in days
-    
+
         // Load messages from localStorage on page load
         window.onload = function() {
             const messages = JSON.parse(localStorage.getItem('chatMessages')) || [];
             const currentTime = new Date().getTime();
             
-            // Filter out expired messages
-            const validMessages = messages.filter(msg => (currentTime - msg.timestamp) < (messageExpiryDays * 24 * 60 * 60 * 1000));
-            localStorage.setItem('chatMessages', JSON.stringify(validMessages)); // Update localStorage
-            
-            validMessages.forEach(msg => displayMessage(msg.username, msg.text, msg.timestamp));
-            
+            // Display valid messages
+            messages.forEach(msg => displayMessage(msg.username, msg.text, msg.timestamp));
+
             // Load user data
-            document.getElementById('displayUsername').textContent = localStorage.getItem('username') || 'Username';
-            document.getElementById('displayEmail').textContent = 'Email: ' + (localStorage.getItem('email') || 'user@example.com');
-            document.getElementById('displayPronoun').textContent = 'Pronoun: ' + (localStorage.getItem('pronoun') || 'He/Him');
+            document.getElementById('displayUsername').textContent = sessionStorage.getItem('username') || 'Username';
+            document.getElementById('displayEmail').textContent = 'Email: ' + (sessionStorage.getItem('email') || 'user@example.com');
+            document.getElementById('displayPronoun').textContent = 'Pronoun: ' + (sessionStorage.getItem('pronoun') || 'He/Him');
         };
-    
+
         function sendMessage() {
             const input = document.getElementById('messageInput');
             const message = input.value;
-            const username = localStorage.getItem('username') || 'User';
-    
+            const username = sessionStorage.getItem('username') || 'User';
+
             if (message) {
                 const newMessage = { username: username, text: message, timestamp: new Date().getTime() };
                 const messages = JSON.parse(localStorage.getItem('chatMessages')) || [];
-    
-                // Add new message and maintain limit
                 messages.push(newMessage);
                 if (messages.length > maxMessages) {
                     messages.shift(); // Remove the oldest message
                 }
-    
                 localStorage.setItem('chatMessages', JSON.stringify(messages));
                 displayMessage(username, message, newMessage.timestamp);
                 input.value = ''; // Clear the input
                 document.getElementById('messageDisplay').scrollTop = document.getElementById('messageDisplay').scrollHeight; // Scroll to the bottom
             }
         }
-    
+
         function displayMessage(username, message, timestamp) {
             const display = document.getElementById('messageDisplay');
             const messageElement = document.createElement('div');
-            
-            // Create a span for the username
-            const usernameElement = document.createElement('span');
-            usernameElement.textContent = username + ': ';
-            
-            // Create a span for the message text
-            const textElement = document.createElement('span');
-            textElement.textContent = message;
-    
-            // Format the timestamp
-            const date = new Date(timestamp);
-            const options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true };
-            const formattedDate = date.toLocaleDateString(undefined, options);
-    
-            // Create a span for the timestamp
-            const timestampElement = document.createElement('span');
-            timestampElement.textContent = ' (' + formattedDate + ')';
-            timestampElement.style.fontSize = 'small';
-            timestampElement.style.color = 'gray';
-    
-            // Apply styles if the username is "Ms Magna"
-            if (username === "Ms Magna") {
-                usernameElement.style.fontWeight = 'bold';
-                usernameElement.style.color = 'purple';
-            }
-    
-            // Append the username, message text, and timestamp
-            messageElement.appendChild(usernameElement);
-            messageElement.appendChild(textElement); // Append the message text
-            messageElement.appendChild(timestampElement); // Append the timestamp
+            messageElement.textContent = username + ': ' + message + ' (' + new Date(timestamp).toLocaleString() + ')';
             display.appendChild(messageElement);
         }
-    
+
         function showEditProfilePopup() {
             alert('Edit profile functionality not implemented yet.');
         }
-    
+
         function openPublishStoryPopup() {
             alert('Chat functionality not implemented yet.');
         }
