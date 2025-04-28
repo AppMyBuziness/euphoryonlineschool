@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Comments</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .comment {
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Submitted Comments</h1>
+    <div id="commentsList"></div>
+
+    <script>
+        // Function to display comments
+        function displayComments() {
+            const commentsList = document.getElementById('commentsList');
+            commentsList.innerHTML = ''; // Clear existing comments
+
+            const comments = JSON.parse(localStorage.getItem('comments')) || [];
+            comments.forEach(entry => {
+                const commentDiv = document.createElement('div');
+                commentDiv.className = 'comment';
+                commentDiv.innerHTML = `
+                    <p>${entry.comment}</p>
+                    <small>Submitted on: ${entry.dateTime}</small>
+                `;
+                commentsList.appendChild(commentDiv);
+            });
+        }
+
+        // Display comments on page load
+        displayComments();
+    </script>
+</body>
+</html>
