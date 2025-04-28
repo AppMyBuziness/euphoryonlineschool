@@ -11,7 +11,7 @@
             padding-left: 100px;
         }
         .navbar {
-           display: flex;
+            display: flex;
             flex-direction: column;
             justify-content: flex-start;
             align-items: center;
@@ -57,10 +57,16 @@
             border: 1px solid #ccc;
             border-radius: 4px;
         }
+        .upload-form {
+            margin-top: 20px;
+        }
+        .upload-form input[type="file"] {
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 <body>
-   <div class="navbar">
+    <div class="navbar">
         <a href="videos.html" class="nav-item" title="Videos and Notes">
             <i class="fas fa-video"></i>
         </a>
@@ -85,9 +91,16 @@
     </div>
 
     <div class="container">
-        <div class="tenor-gif-embed" data-postid="21188383" data-share-method="host" data-aspect-ratio="1" data-width="3cm" height="3cm"><a href="https://tenor.com/view/angry-emo-gif-21188383">Angry Emo Sticker</a>from <a href="https://tenor.com/search/angry-stickers">Angry Stickers</a></div> <script type="text/javascript" async src="https://tenor.com/embed.js"></script>
         <div class="header">Assignments and Tests</div>
         <div id="assignmentList"></div>
+
+        <div class="upload-form">
+            <h3>Upload Assignment</h3>
+            <form id="uploadForm" action="YOUR_SERVER_SIDE_SCRIPT" method="POST" enctype="multipart/form-data">
+                <input type="file" name="pdfFile" accept="application/pdf" required>
+                <button type="submit">Send</button>
+            </form>
+        </div>
     </div>
 
     <script>
