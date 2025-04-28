@@ -57,11 +57,12 @@
             border: 1px solid #ccc;
             border-radius: 4px;
         }
-        .upload-form {
+        .upload-form, .comment-form {
             margin-top: 20px;
         }
         .upload-form input[type="file"],
-        .upload-form input[type="email"] {
+        .upload-form input[type="email"],
+        .comment-form input[type="text"] {
             margin-bottom: 10px;
             width: 100%;
         }
@@ -105,13 +106,14 @@
             </form>
         </div>
 
-        <div id="responseMessage">
-            <?php
-            if (isset($_GET['message'])) {
-                echo htmlspecialchars($_GET['message']);
-            }
-            ?>
+        <div class="comment-form">
+            <h3>Leave a Comment</h3>
+            <form id="commentForm" onsubmit="submitComment(event)">
+                <input type="text" id="commentInput" placeholder="Your Comment" required>
+                <button type="submit">Submit</button>
+            </form>
         </div>
+        <div id="commentsList"></div>
     </div>
 
     <script>
@@ -147,8 +149,50 @@
             });
         }
 
-        // Display assignments on page load
+        // Function to submit a comment
+        function submitComment(event) {
+            event.preventDefault(); // Prevent the form from submitting
+
+            const commentInput = document.getElementById('commentInput');
+            const comment = commentInput.value;
+            const dateTime = new Date().toLocaleString(); // Get current date and time
+
+            // Get existing comments from local storage
+            let comments = JSON.parse(localStorage.getItem('comments')) || [];
+            
+            // Add new comment to the array
+            comments.push({ comment, dateTime });
+            
+            // Save updated comments back to local storage
+            localStorage.setItem('comments', JSON.stringify(comments));
+
+            // Clear the input field
+            commentInput.value = '';
+
+            // Display updated comments
+            displayComments();
+        }
+
+        // Function to display comments
+        function displayComments() {
+            const commentsList = document.getElementById('commentsList');
+            commentsList.innerHTML = ''; // Clear existing comments
+
+            const comments = JSON.parse(localStorage.getItem('comments')) || [];
+            comments.forEach(entry => {
+                const commentDiv = document.createElement('div');
+                commentDiv.className = 'item-container';
+                commentDiv.innerHTML = `
+                    <p>${entry.comment}</p>
+                    <small>Submitted on: ${entry.dateTime}</small>
+                `;
+                commentsList.appendChild(commentDiv);
+            });
+        }
+
+        // Display assignments and comments on page load
         displayAssignments();
+        displayComments();
     </script>
 </body>
 </html>
