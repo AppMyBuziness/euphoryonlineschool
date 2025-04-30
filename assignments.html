@@ -97,23 +97,16 @@
         <div class="header">Assignments and Tests</div>
         <div id="assignmentList"></div>
 
-        <div class="upload-form">
-            <h3>Upload Assignment</h3>
-            <form id="uploadForm" action="sendmail.php" method="POST" enctype="multipart/form-data">
-                <input type="email" name="senderEmail" placeholder="Your Email" required>
-                <input type="file" name="pdfFile" accept="application/pdf" required>
-                <button type="submit">Send</button>
-            </form>
-        </div>
+       
 
         <div class="comment-form">
-            <h3>Leave a Comment</h3>
+            <h3>write assignment</h3>
             <form id="commentForm" onsubmit="submitComment(event)">
-                <input type="text" id="commentInput" placeholder="Your Comment" required>
+                <input type="text" id="commentInput" placeholder="Your assignment" required>
                 <button type="submit">Submit</button>
             </form>
         </div>
-        <div id="commentsList"></div>
+       
     </div>
 
     <script>
@@ -122,13 +115,13 @@
             {
                 name: "JavaScript Basics Assignment",
                 dueDate: "2025-05-01",
-                pdfLink: "https://example.com/assignment1.pdf",
+                pdfLink: "https://github.com/assignment1.pdf",
                 totalMark: "100"
             },
             {
                 name: "CSS Project",
                 dueDate: "2025-05-10",
-                pdfLink: "https://example.com/assignment2.pdf",
+                pdfLink: "https://github.com/assignment2.pdf",
                 totalMark: "50"
             }
         ];
